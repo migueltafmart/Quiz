@@ -1,3 +1,15 @@
+class Quiz {
+    #name
+    #length
+    constructor(name, ...question){
+        this.#name = name;
+        this.#length = question.length;
+
+    }
+    get name () {return this.#name};
+    set name (name) {return this.#name = name};
+    get length (){return this.#length};
+}
 class Question {
     #q
     #o1
@@ -49,6 +61,17 @@ let quest ={
     option4: "De color verde",
     boo04:false,
 }
+let quest1 ={
+    question:"¿Cuando pasan las cigueñas por Madrid?",
+    option1: "En Agosto",
+    booO1: false,
+    option2: "En Octubre",
+    booO2: false,
+    option3: "En enero",
+    booO3: false,
+    option4: "Ya no vienen #CalentamientoGlobal",
+    boo04:true,
+}
 function check (element){
    if (element.innerHTML === "check_box_outline_blank"){
        element.innerHTML = "check_box";
@@ -59,11 +82,16 @@ function check (element){
 function addAnswer(event){
     event.preventDefault();
     // Que por lo menos haya una respuesta marcada como correcta
+    if(document.querySelectorAll("div.wrapper > input[type=checkbox]:checked") == null){
+        alert("Marca una respuesta correcta porfa");
+    }
     // Cuatro opciones llenas
     // Pregunta llena
     event.target.submit();
 }
-let quest1 = new Question(quest);
+let Quest = new Question(quest);
+let Quest1 = new Question(quest1);
+let Quiz1 = new Quiz("Quiz de prueba", Quest, Quest1);
 let s1 = document.getElementById("s1");
 let s2 = document.getElementById("s2");
 let s3 = document.getElementById("s3");

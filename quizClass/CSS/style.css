@@ -1,10 +1,13 @@
 body {
     font-family: futura-pt, Futura, sans-serif;
+    box-sizing: border-box;
 }
 
 div.wrapper {
     width: 300px;
     margin: 0 auto;
+    display: flex;
+    flex-flow: column;
 }
 header{
     position: fixed;
@@ -13,29 +16,39 @@ header{
     width: 100%;
     background: black;
     color: white;
-    text-transform: uppercase;
     font-style: italic;
     font-weight: 800;
     padding: 1px;
 }
+header h1{
+    width: 100px;
+    text-align: center;
+    background: #00aa8e;
+    padding: 0 12px;
+}
 form#admin {
+    width: 100%;
+    margin: 0;
     margin-top: 96px;
     display: flex;
     flex-flow: wrap;
+    padding: 0;
 }
-
+fomrm#admin > div.wrapper2{
+    width: 100%;
+}
 form#admin fieldset {
     width: 100%;
     border: none;
-    background: #fab0fd;
+    background: #00aa8ead;
     margin: 0;
 }
 
 form#admin fieldset:nth-child(even) {
-    background: #88d7f1;
+    background: #00aa8e59;
 }
 
-form#admin fieldset:first-child {
+form#admin > fieldset:first-child {
     background: white;
 }
 
@@ -45,18 +58,23 @@ form#admin fieldset label:last-child {
 }
 
 form#admin fieldset span.material-icons {
-    font-size: medium;
+    font-size: 12px;
     line-height: 36px;
     cursor: pointer;
+    vertical-align: bottom;
 }
 
 input[type=text] {
-    width: 98%;
     margin-bottom: 6px;
     border: none;
     border-radius: 12px;
     padding: 6px;
     font-size: large;
+}
+ form#admin > fieldset > div.wrapper > input[name=question]:first-of-type {
+   
+    border: 1.5px black solid;
+    
 }
 
 input[type=text]:focus {
@@ -67,18 +85,23 @@ input[type=text]:focus {
 input[type=checkbox] {
     display: none;
 }
-
-input#send {
-    position: relative;
-    right: 0;
+form#admin > div.wrapper {
+    flex-flow: row;
+    justify-content: space-between;
+}
+form#admin > div.wrapper > input{
     margin-top: 12px;
-    margin-left: 55%;
     padding: 12px;
     font-size: large;
     font-weight: bolder;
-    border: none;
     border-radius: 12px;
-    background: #fffd77;
+    border: none;
+}
+form#admin > div.wrapper > input#send {
+    background: #00aa8e;
+}
+form#admin > div.wrapper > input#blank{
+    background:#00aa8e33;
 }
 footer{
     margin-top: 96px;
@@ -86,13 +109,4 @@ footer{
     color: white;
     padding: 36PX;
 }
-@media screen and (min-width: 979px) and (max-width: 1199px){
-    div.wrapper{
-        width: 978px;
-    }
-}
-@media screen and (min-width: 1200px){
-    div.wrapper{
-        width: 1000px;
-    }
-}
+
