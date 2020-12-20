@@ -19,15 +19,11 @@ function chequear(num,respuesta){
 
 function checkAnswers(e) {
     e.preventDefault();
- 
-
     chequear(1,answers.p1)
     chequear(2,answers.p2)
     chequear(3,answers.p3)
     chequear(4,answers.p4)
     chequear(5,answers.p5)
-    
-
     //e.target.submit();
 };
-document.getElementById("quiz").addEventListener("submit", event => checkAnswers(event));
+//document.getElementById("quiz").addEventListener("submit", event => checkAnswers(event));
