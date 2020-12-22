@@ -1,0 +1,28 @@
+body{color: white;}
+input[type=radio]{
+    display: none;
+}
+label{
+    display: block;
+    padding: 12px;
+    margin: 12px auto;
+    background: blue;
+    border-radius: 12px;
+    box-shadow: 0 6px 0 darkblue;
+}
+label:active{
+    display: block;
+    padding: 12px;
+    margin: 12px auto;
+    background: blue;
+    border-radius: 12px;
+    margin-bottom: 6px;
+    margin-top: 18px;
+    box-shadow: 0 6px 0 transparent;
+}
+form{
+    background: green;
+    border-radius: 12px;
+    padding: 6px;
+    margin-bottom: 12px;
+}
