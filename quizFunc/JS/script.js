@@ -31,7 +31,7 @@ function printQuestion (question) {
     let labelText = document.createTextNode(question.legend);
     legend.appendChild(labelText);
     form.appendChild(legend);
-    question.answers.forEach(option => {
+    question.answers.map(option => {
         let input = document.createElement("input");
         input.setAttribute("type", "radio");
         input.setAttribute("value", option.value);
@@ -41,7 +41,7 @@ function printQuestion (question) {
         label.appendChild(labelText);
         label.appendChild(input);
         form.appendChild(label);
-        document.querySelector("main").appendChild(form);
+        return document.querySelector("main").appendChild(form);
     });
     let nextButton = document.createElement("input");
     nextButton.setAttribute("type", "submit");
@@ -57,13 +57,14 @@ function printQuestion (question) {
             console.log("Respuesta Correcta!");
         }else{
             console.warn("Respuesta Incorrecta");
+            console.log(userInput);
+
         }
     }
     form.addEventListener("submit", (event) => checkQuestion(event));
     return form;
 }
 
-// @param questions {Array of JSONS}
 function printQuestions (questions) {
  return questions.map(question => printQuestion(question))
 }

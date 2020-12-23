@@ -1,28 +1,41 @@
-body{color: white;}
-input[type=radio]{
-    display: none;
+body{
+    font-family: "Futura", Futura, sans-serif;
+    margin: 0;
 }
-label{
-    display: block;
+header{
+    height: 72px;
+    background: dodgerblue;
+    color: white;
+    margin: 0;
+}
+header > h1{
+    margin: 0;
+    line-height: 72px;
+}
+main{
     padding: 12px;
-    margin: 12px auto;
-    background: blue;
-    border-radius: 12px;
-    box-shadow: 0 6px 0 darkblue;
 }
-label:active{
-    display: block;
+article#quest{
+    display: flex;
+    flex-flow: column;
+}
+section#opt{
+    display: flex;
+    flex-flow: column;
+}
+button{
+    background: #ffc0cb;
+    border: none;
     padding: 12px;
-    margin: 12px auto;
-    background: blue;
+    margin: 12px 0;
     border-radius: 12px;
-    margin-bottom: 6px;
-    margin-top: 18px;
-    box-shadow: 0 6px 0 transparent;
 }
-form{
-    background: green;
-    border-radius: 12px;
-    padding: 6px;
-    margin-bottom: 12px;
+button.clicked{
+    background: #fd768c;
+}
+button.notclicked{
+    background: #fce0e4;
+}
+button#next{
+    background: greenyellow;
 }
