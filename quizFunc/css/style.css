@@ -1,10 +1,22 @@
+:root{
+    --viewport: 340px;
+}
 body{
-    font-family: "Futura", Futura, sans-serif;
+    font-family: futura-pt, sans-serif;
     margin: 0;
 }
 *.wrapper{
-    width:380px;
+    width:var(--viewport);
     margin: 0 auto;
+    
+    
+}
+article.wrapper{
+    box-shadow: 0 0 12px #00000080;
+    border-radius: 12px;
+    margin-bottom: 36px;
+    margin-top: 12px ;
+    padding: 12px;
 }
 header{
     height: 72px;
@@ -23,6 +35,7 @@ main{
 article{
     display: flex;
     flex-flow: column;
+    position: relative;
 }
 section#opt{
     display: flex;
@@ -41,16 +54,33 @@ button.clicked{
 button.notclicked{
     background: #fce0e4;
 }
-button#next{
+button.action{
     background: greenyellow;
-    width: 72px;
+    width: 128px;
     align-self: flex-end;
 }
-svg{
-    width: 100%;
-    height: 100%;
-}
-svg > circle{
+section#results {
+    display: flex;
+    width: 240px;
+    height: 240px;
+    border-radius: 100%;
+    justify-content: space-around;
+    align-items: center;
     margin: 0 auto;
-    fill: greenyellow;
+
+}
+section#results > h3{
+    font-size: 72px;
+}
+.cls-1{
+    background:#5cff6e;
+    
+}
+.cls-2{
+    background:#f4ff5c;
+    
+}
+.cls-3{
+    background:#ff7d5c;
+    
 }
