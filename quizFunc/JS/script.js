@@ -1,5 +1,8 @@
-const API_URL = "https://opentdb.com/api.php?amount=10&type=multiple";
+const API_URL = "https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple";
 const main = document.querySelector("main");
+let score = 0;
+let round = 0;
+//Quiz
 const questDiv = document.createElement("article");
 questDiv.id = "quest";
 questDiv.classList = "wrapper";
@@ -19,6 +22,7 @@ nextButton.innerText = "Next";
 questDiv.appendChild(questP);
 questDiv.appendChild(optDiv);
 questDiv.appendChild(nextButton);
+//Results
 const articleResults = document.createElement("article");
 articleResults.classList = "wrapper";
 const resultHeading = document.createElement("h2");
@@ -30,7 +34,7 @@ const supScore = document.createElement("sup");
 const barNode = document.createTextNode("/");
 const subScore = document.createElement("sub");
 const repeatButton = document.createElement("button");
-repeatButton.classList ="action";
+repeatButton.classList = "action";
 repeatButton.innerText = "Take another!";
 subScore.innerText = "10";
 scoreText.appendChild(supScore);
@@ -40,8 +44,25 @@ scoreSection.appendChild(scoreText);
 articleResults.appendChild(resultHeading);
 articleResults.appendChild(scoreSection);
 articleResults.appendChild(repeatButton);
-let score = 0;
-let round = 0;
+//Home
+const homeArticle = document.createElement("article");
+homeArticle.classList = "wrapper";
+const statsArticle = document.createElement("article");
+statsArticle.classList = "wrapper";
+const quizHeading = document.createElement("h2");
+quizHeading.innerText = "Welcome to the Quiz!";
+const statsHeading = document.createElement("h2");
+statsHeading.innerText = "Your Stats!";
+const statsSection = document.createElement("section");
+statsSection.id = "stats";
+statsSection.classList = "ct-perfect-fifth";
+const quizButton = document.createElement("button");
+quizButton.classList = "action";
+quizButton.innerText = "Take a Quiz!";
+homeArticle.appendChild(quizHeading);
+homeArticle.appendChild(quizButton);
+statsArticle.appendChild(statsHeading);
+statsArticle.appendChild(statsSection);
 
 function isClicked(value) {
     document.querySelector(`button[value=${value}]`).classList = "answer clicked";
@@ -49,25 +70,62 @@ function isClicked(value) {
         .forEach(buttton => buttton.classList = "answer notclicked");
 
 }
-function toBeg () {
-    location.reload();
+
+function toBeg() {
+    while (main.firstChild) {
+
+        main.removeChild(main.lastChild);
+    }
+    main.appendChild(homeArticle);
+    if (localStorage.quizes) {
+        main.appendChild(statsArticle);
+        new Chartist.Line('#stats', {
+            labels: JSON.parse(localStorage.quizes).map(element => element.date).sort(),
+            series: [JSON.parse(localStorage.quizes).map(element => element.score)]
+        }, {
+            fullWidth: true,
+            chartPadding: {
+                right: 40
+            },
+            axisY: {
+                onlyInteger: true,
+                type: Chartist.FixedScaleAxis,
+                ticks: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                low: 0,
+                high: 10,
+            }
+        });
+    }
+
+    quizButton.addEventListener("click", toQuiz);
 }
+
 function gameFinish() {
+    let quizes = [];
     let today = new Date();
     let dd = String(today.getDate()).padStart(2, "0");
-    let mm = String(today.getMonth() +1).padStart(2, "0");
+    let mm = String(today.getMonth() + 1).padStart(2, "0");
     let yyyy = today.getFullYear();
     today = `${yyyy}-${mm}-${dd}`
+    let newQuiz = {
+        "score": score,
+        "date": today,
+    }
+    if (localStorage.quizes) {
+        quizes = JSON.parse(localStorage.quizes);
+    }
+    quizes.push(newQuiz);
+    localStorage.quizes = JSON.stringify(quizes);
     while (main.firstChild) {
-        
+
         main.removeChild(main.lastChild);
     }
     supScore.innerText = String(score).padStart(2, "0");
-    if (score < 5){
+    if (score < 5) {
         scoreSection.classList = "cls-3";
-    }else if (score < 7){
+    } else if (score < 7) {
         scoreSection.classList = "cls-2";
-    }else{
+    } else {
         scoreSection.classList = "cls-1";
     }
     main.append(articleResults);
@@ -96,12 +154,10 @@ function toNext(question) {
 function checkQuest(questionArray) {
     let userAnswer = document.querySelector("button.clicked");
     if (userAnswer == null) {
-        console.error("No input");
     } else if (questionArray[round].correct_answer === userAnswer.innerHTML) {
         ++score;
-        console.log(score)
         toNext(questionArray);
-        
+
     } else {
         toNext(questionArray);
     }
@@ -113,18 +169,25 @@ function htmlEntities(str) {
     return txt.value;
 }
 
-const questProm = fetch(API_URL).then(res => res.json())
-    .then(questJSON => {
-        let questTextNode = document.createTextNode(htmlEntities(questJSON.results[round].question));
-        questP.appendChild(questTextNode);
-        let options = questJSON.results[round].incorrect_answers;
-        options.push(questJSON.results[round].correct_answer);
-        options.sort(() => Math.random() - 0.5)
-        options.forEach((option, i) => {
-            answers[i].innerText = htmlEntities(option)
-            answers[i].value = `o-${htmlEntities(option).replace(/[,.:;$#/()!?&'"]/g, '').replace(/\s/g, '-').toLowerCase()}`;
-        });
-        answers.forEach(answer => answer.addEventListener("click", () => isClicked(answer.value)));
-        nextButton.addEventListener("click", () => checkQuest(questJSON.results))
-        main.appendChild(questDiv);;
-    })
+function toQuiz() {
+    while (main.firstChild) {
+
+        main.removeChild(main.lastChild);
+    }
+    fetch(API_URL).then(res => res.json())
+        .then(questJSON => {
+            let questTextNode = document.createTextNode(htmlEntities(questJSON.results[round].question));
+            questP.appendChild(questTextNode);
+            let options = questJSON.results[round].incorrect_answers;
+            options.push(questJSON.results[round].correct_answer);
+            options.sort(() => Math.random() - 0.5)
+            options.forEach((option, i) => {
+                answers[i].innerText = htmlEntities(option)
+                answers[i].value = `o-${htmlEntities(option).replace(/[,.:;$#/()!?&'"]/g, '').replace(/\s/g, '-').toLowerCase()}`;
+            });
+            answers.forEach(answer => answer.addEventListener("click", () => isClicked(answer.value)));
+            nextButton.addEventListener("click", () => checkQuest(questJSON.results))
+            main.appendChild(questDiv);;
+        })
+}
+toBeg();

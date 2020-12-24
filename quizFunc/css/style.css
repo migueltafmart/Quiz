@@ -1,64 +1,126 @@
-:root{
+:root {
     --viewport: 340px;
 }
-body{
-    font-family: futura-pt, sans-serif;
+
+body {
+    font-family: futura-pt, serif;
     margin: 0;
+    background: #1f8fff40;
 }
-*.wrapper{
-    width:var(--viewport);
+
+*.wrapper {
+    width: var(--viewport);
     margin: 0 auto;
-    
-    
+
+
 }
-article.wrapper{
+
+article.wrapper {
     box-shadow: 0 0 12px #00000080;
     border-radius: 12px;
     margin-bottom: 36px;
-    margin-top: 12px ;
+    margin-top: 12px;
     padding: 12px;
+    background: white;
 }
-header{
+
+header {
     height: 72px;
     background: dodgerblue;
     color: white;
     margin: 0;
     box-shadow: 0 0 12px #00000080;
 }
-header > div.wrapper > h1{
+
+header>div.wrapper>h1 {
     margin: 0;
     line-height: 72px;
 }
-main{
+
+main {
     padding: 12px;
 }
-article{
+
+article {
     display: flex;
     flex-flow: column;
     position: relative;
 }
-section#opt{
+
+section#opt {
     display: flex;
     flex-flow: column;
 }
-button{
+
+button {
     background: #ffc0cb;
     border: none;
     padding: 12px;
     margin: 12px 0;
     border-radius: 12px;
 }
-button.clicked{
-    background: #fd768c;
+
+section#opt>button:nth-child(1) {
+    background: #ff6565;
 }
-button.notclicked{
-    background: #fce0e4;
+
+section#opt>button:nth-child(2) {
+    background: #ffe365;
 }
-button.action{
-    background: greenyellow;
+
+section#opt>button:nth-child(3) {
+    background: #65ff6d;
+}
+
+section#opt>button:nth-child(4) {
+    background: #65b5ff;
+}
+
+section#opt>button.clicked:nth-child(1) {
+    background: #fc3333;
+}
+
+section#opt>button.clicked:nth-child(2) {
+    background: #fbff20;
+}
+
+section#opt>button.clicked:nth-child(3) {
+    background: #1ef829;
+    ;
+}
+
+section#opt>button.clicked:nth-child(4) {
+    background: #158eff;
+}
+
+section#opt>button.notclicked:nth-child(1) {
+    background: #ffbfbf;
+    color: #00000080;
+}
+
+section#opt>button.notclicked:nth-child(2) {
+    background: #ffefa9;
+    color: #00000080;
+}
+
+section#opt>button.notclicked:nth-child(3) {
+    background: #a7ffab;
+    color: #00000080;
+}
+
+section#opt>button.notclicked:nth-child(4) {
+    background: #a2d2ff;
+    color: #00000080;
+}
+
+button.action {
+    background: dodgerblue;
+    color: white;
+    font-weight: bold;
     width: 128px;
     align-self: flex-end;
 }
+
 section#results {
     display: flex;
     width: 240px;
@@ -69,18 +131,41 @@ section#results {
     margin: 0 auto;
 
 }
-section#results > h3{
+
+section#results>h3 {
     font-size: 72px;
 }
-.cls-1{
-    background:#5cff6e;
-    
+
+.cls-1 {
+    background: #5cff6e;
+
 }
-.cls-2{
-    background:#f4ff5c;
-    
+
+.cls-2 {
+    background: #f4ff5c;
+
 }
-.cls-3{
-    background:#ff7d5c;
-    
+
+.cls-3 {
+    background: #ff7d5c;
+
+}
+
+.ct-series-a .ct-line {
+    /* Set the colour of this series line */
+    stroke: dodgerblue;
+    /* Control the thikness of your lines */
+    stroke-width: 5px;
+    /* Create a dashed line with a pattern */
+}
+
+/* This selector overrides the points style on line charts. Points on line charts are actually just very short strokes. This allows you to customize even the point size in CSS */
+.ct-series-a .ct-point {
+    /* Colour of your points */
+    stroke: dodgerblue;
+}
+@media screen and (min-width:790px){
+    :root{
+        --viweport: 760px
+    }
 }
