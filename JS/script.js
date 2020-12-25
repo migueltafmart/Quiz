@@ -59,7 +59,7 @@ statsArticle.appendChild(statsSection);
 
 if (localStorage.quizes && (JSON.parse(localStorage.quizes).length > 1)) {
     let dates = JSON.parse(localStorage.quizes);
-    while(dates.length > 5){
+    while (dates.length > 5) {
         dates.splice(0, 1);
     }
     main.appendChild(statsArticle);
@@ -80,12 +80,16 @@ if (localStorage.quizes && (JSON.parse(localStorage.quizes).length > 1)) {
         }
     });
 }
-function toBeg () {
-    while (main.firstChild) { main.removeChild(main.lastChild)};
+
+function toBeg() {
+    while (main.firstChild) {
+        main.removeChild(main.lastChild)
+    };
     main.appendChild(homeArticle);
     let dates = JSON.parse(localStorage.quizes);
     if (localStorage.quizes && (JSON.parse(localStorage.quizes).length > 1)) {
-        while(dates.length > 5){
+        let dates = JSON.parse(localStorage.quizes);
+        while (dates.length > 5) {
             dates.splice(0, 1);
         }
         main.appendChild(statsArticle);
@@ -107,6 +111,7 @@ function toBeg () {
         });
     }
 }
+
 function isClicked(value) {
     document.querySelector(`button[value=${value}]`).classList = "answer clicked";
     Array.from(document.querySelectorAll(`section#opt button:not([value=${value}])`))
@@ -144,7 +149,7 @@ function gameFinish() {
     }
     main.append(articleResults);
     round = 0;
-    answers.map(element => element.classList ="answer");
+    answers.map(element => element.classList = "answer");
     repeatButton.addEventListener("click", toBeg);
 }
 
