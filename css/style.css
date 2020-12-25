@@ -30,7 +30,7 @@ header {
     color: white;
     margin: 0;
     box-shadow: 0 0 12px #00000080;
-    padding: 12px;
+    padding-top: 6px;
 }
 header > div.wrapper{
     display: flex;
