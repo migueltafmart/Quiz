@@ -14,7 +14,7 @@ const answer2 = document.createElement("button");
 const answer3 = document.createElement("button");
 const answer4 = document.createElement("button");
 const answers = [answer1, answer2, answer3, answer4];
-answers.forEach(answer => optDiv.appendChild(answer))
+answers.forEach(answer => optDiv.appendChild(answer));
 answers.forEach(answer => answer.classList = "answer");
 const nextButton = document.createElement("button");
 nextButton.classList = "action";
@@ -60,8 +60,8 @@ statsArticle.appendChild(statsSection);
 if (localStorage.quizes && (JSON.parse(localStorage.quizes).length > 1)) {
     let dates = JSON.parse(localStorage.quizes);
     while (dates.length > 5) {
-        dates.splice(0, 1);
-    }
+        dates.splice(0, 1)
+    };
     main.appendChild(statsArticle);
     new Chartist.Line('#stats', {
         labels: dates.map(element => new Date(element.date).getDate()).sort(),
@@ -79,7 +79,7 @@ if (localStorage.quizes && (JSON.parse(localStorage.quizes).length > 1)) {
             high: 10,
         }
     });
-}
+};
 
 function toBeg() {
     while (main.firstChild) {
@@ -90,8 +90,8 @@ function toBeg() {
     if (localStorage.quizes && (JSON.parse(localStorage.quizes).length > 1)) {
         let dates = JSON.parse(localStorage.quizes);
         while (dates.length > 5) {
-            dates.splice(0, 1);
-        }
+            dates.splice(0, 1)
+        };
         main.appendChild(statsArticle);
         new Chartist.Line('#stats', {
             labels: dates.map(element => new Date(element.date).getDate()).sort(),
@@ -109,15 +109,14 @@ function toBeg() {
                 high: 10,
             }
         });
-    }
-}
+    };
+};
 
 function isClicked(value) {
     document.querySelector(`button[value=${value}]`).classList = "answer clicked";
     Array.from(document.querySelectorAll(`section#opt button:not([value=${value}])`))
         .forEach(buttton => buttton.classList = "answer notclicked");
-
-}
+};
 
 function gameFinish() {
     let quizes = [];
@@ -125,20 +124,19 @@ function gameFinish() {
     let dd = String(today.getDate()).padStart(2, "0");
     let mm = String(today.getMonth() + 1).padStart(2, "0");
     let yyyy = today.getFullYear();
-    today = `${yyyy}-${mm}-${dd}`
+    today = `${yyyy}-${mm}-${dd}`;
     let newQuiz = {
         "score": score,
         "date": today,
-    }
+    };
     if (localStorage.quizes) {
-        quizes = JSON.parse(localStorage.quizes);
-    }
+        quizes = JSON.parse(localStorage.quizes)
+    };
     quizes.push(newQuiz);
     localStorage.quizes = JSON.stringify(quizes);
     while (main.firstChild) {
-
-        main.removeChild(main.lastChild);
-    }
+        main.removeChild(main.lastChild)
+    };
     supScore.innerText = String(score).padStart(2, "0");
     if (score < 5) {
         scoreSection.classList = "cls-3";
@@ -151,12 +149,11 @@ function gameFinish() {
     round = 0;
     answers.map(element => element.classList = "answer");
     repeatButton.addEventListener("click", toBeg);
-}
+};
 
 function toNext(question) {
     ++round;
     if (round >= 10) {
-
         gameFinish();
     } else {
         questP.innerText = htmlEntities(question[round].question);
@@ -164,50 +161,48 @@ function toNext(question) {
         options.push(question[round].correct_answer);
         options.sort(() => Math.random() - 0.5);
         options.map((option, i) => {
-            answers[i].innerText = htmlEntities(option)
+            answers[i].innerText = htmlEntities(option);
             answers[i].value = `o-${htmlEntities(option).replace(/[,.:;$#/()!?&'"]/g, '').replace(/\s/g, '-').toLowerCase()}`;
         });
-        answers.forEach(button => button.classList = "answer")
-    }
-
-}
+        answers.forEach(button => button.classList = "answer");
+    };
+};
 
 function checkQuest(questionArray) {
     let userAnswer = document.querySelector("button.clicked");
     if (userAnswer == null) {} else if (questionArray[round].correct_answer === userAnswer.innerHTML) {
         ++score;
         toNext(questionArray);
-
     } else {
         toNext(questionArray);
-    }
-}
+    };
+};
 
 function htmlEntities(str) {
     let txt = document.createElement("textarea");
     txt.innerHTML = str;
     return txt.value;
-}
+};
 
 function toQuiz() {
     while (main.firstChild) {
-
-        main.removeChild(main.lastChild);
-    }
+        main.removeChild(main.lastChild)
+    };
     fetch(API_URL).then(res => res.json())
         .then(questJSON => {
             let questTextNode = document.createTextNode(htmlEntities(questJSON.results[round].question));
             questP.appendChild(questTextNode);
             let options = questJSON.results[round].incorrect_answers;
             options.push(questJSON.results[round].correct_answer);
-            options.sort(() => Math.random() - 0.5)
+            options.sort(() => Math.random() - 0.5);
             options.forEach((option, i) => {
                 answers[i].innerText = htmlEntities(option)
                 answers[i].value = `o-${htmlEntities(option).replace(/[,.:;$#/()!?&'"]/g, '').replace(/\s/g, '-').toLowerCase()}`;
             });
             answers.forEach(answer => answer.addEventListener("click", () => isClicked(answer.value)));
-            nextButton.addEventListener("click", () => checkQuest(questJSON.results))
-            main.appendChild(questDiv);;
-        })
-}
+            nextButton.addEventListener("click", () => checkQuest(questJSON.results));
+            main.appendChild(questDiv);
+        });
+};
+
 quizButton.addEventListener("click", toQuiz);
