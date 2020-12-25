@@ -31,10 +31,11 @@ header {
     margin: 0;
     box-shadow: 0 0 12px #00000080;
 }
-
-header>div.wrapper>h1 {
-    margin: 0;
-    line-height: 72px;
+header > div.wrapper{
+    display: flex;
+}
+header > div.wrapper > img {
+    height: 64px;
 }
 
 main {
@@ -153,7 +154,7 @@ section#results>h3 {
 
 .ct-series-a .ct-line {
     /* Set the colour of this series line */
-    stroke: dodgerblue;
+    stroke: #1e90ff;
     /* Control the thikness of your lines */
     stroke-width: 5px;
     /* Create a dashed line with a pattern */
@@ -165,7 +166,31 @@ section#results>h3 {
     stroke: dodgerblue;
 }
 @media screen and (min-width:790px){
-    :root{
-        --viweport: 760px
+    header > div.wrapper {
+        width: 760px;
+    }
+    main{
+        display:flex;
+        width: 780px;
+        margin: 0 auto;
+        justify-content: space-between;
+    }
+    section#opt {
+        flex-flow: row wrap;
+        justify-content: space-between;
+    }
+    article.wrapper{
+        width: 45%;
+    }
+    article#quest{
+        width: 100%;
+    }
+    section#opt > button{
+        width: 42%;
+        height: 72px;
+        margin: 4% 0%;
+    }
+    button#quizButton{
+        margin-top: 200px;
     }
 }

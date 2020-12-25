@@ -45,43 +45,53 @@ articleResults.appendChild(resultHeading);
 articleResults.appendChild(scoreSection);
 articleResults.appendChild(repeatButton);
 //Home
-const homeArticle = document.createElement("article");
-homeArticle.classList = "wrapper";
+const homeArticle = document.getElementById("home");
 const statsArticle = document.createElement("article");
 statsArticle.classList = "wrapper";
-const quizHeading = document.createElement("h2");
-quizHeading.innerText = "Welcome to the Quiz!";
 const statsHeading = document.createElement("h2");
 statsHeading.innerText = "Your Stats!";
 const statsSection = document.createElement("section");
 statsSection.id = "stats";
 statsSection.classList = "ct-perfect-fifth";
-const quizButton = document.createElement("button");
-quizButton.classList = "action";
-quizButton.innerText = "Take a Quiz!";
-homeArticle.appendChild(quizHeading);
-homeArticle.appendChild(quizButton);
+const quizButton = document.getElementById("quizButton");
 statsArticle.appendChild(statsHeading);
 statsArticle.appendChild(statsSection);
 
-function isClicked(value) {
-    document.querySelector(`button[value=${value}]`).classList = "answer clicked";
-    Array.from(document.querySelectorAll(`section#opt button:not([value=${value}])`))
-        .forEach(buttton => buttton.classList = "answer notclicked");
-
-}
-
-function toBeg() {
-    while (main.firstChild) {
-
-        main.removeChild(main.lastChild);
+if (localStorage.quizes && (JSON.parse(localStorage.quizes).length > 1)) {
+    let dates = JSON.parse(localStorage.quizes);
+    while(dates.length > 5){
+        dates.splice(0, 1);
     }
+    main.appendChild(statsArticle);
+    new Chartist.Line('#stats', {
+        labels: dates.map(element => new Date(element.date).getDate()).sort(),
+        series: [dates.map(element => element.score)]
+    }, {
+        fullWidth: true,
+        chartPadding: {
+            right: 40
+        },
+        axisY: {
+            onlyInteger: true,
+            type: Chartist.FixedScaleAxis,
+            ticks: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            low: 0,
+            high: 10,
+        }
+    });
+}
+function toBeg () {
+    while (main.firstChild) { main.removeChild(main.lastChild)};
     main.appendChild(homeArticle);
-    if (localStorage.quizes) {
+    let dates = JSON.parse(localStorage.quizes);
+    if (localStorage.quizes && (JSON.parse(localStorage.quizes).length > 1)) {
+        while(dates.length > 5){
+            dates.splice(0, 1);
+        }
         main.appendChild(statsArticle);
         new Chartist.Line('#stats', {
-            labels: JSON.parse(localStorage.quizes).map(element => element.date).sort(),
-            series: [JSON.parse(localStorage.quizes).map(element => element.score)]
+            labels: dates.map(element => new Date(element.date).getDate()).sort(),
+            series: [dates.map(element => element.score)]
         }, {
             fullWidth: true,
             chartPadding: {
@@ -96,8 +106,12 @@ function toBeg() {
             }
         });
     }
+}
+function isClicked(value) {
+    document.querySelector(`button[value=${value}]`).classList = "answer clicked";
+    Array.from(document.querySelectorAll(`section#opt button:not([value=${value}])`))
+        .forEach(buttton => buttton.classList = "answer notclicked");
 
-    quizButton.addEventListener("click", toQuiz);
 }
 
 function gameFinish() {
@@ -129,6 +143,8 @@ function gameFinish() {
         scoreSection.classList = "cls-1";
     }
     main.append(articleResults);
+    round = 0;
+    answers.map(element => element.classList ="answer");
     repeatButton.addEventListener("click", toBeg);
 }
 
@@ -153,8 +169,7 @@ function toNext(question) {
 
 function checkQuest(questionArray) {
     let userAnswer = document.querySelector("button.clicked");
-    if (userAnswer == null) {
-    } else if (questionArray[round].correct_answer === userAnswer.innerHTML) {
+    if (userAnswer == null) {} else if (questionArray[round].correct_answer === userAnswer.innerHTML) {
         ++score;
         toNext(questionArray);
 
@@ -190,4 +205,4 @@ function toQuiz() {
             main.appendChild(questDiv);;
         })
 }
-toBeg();
+quizButton.addEventListener("click", toQuiz);
