@@ -30,9 +30,11 @@ header {
     color: white;
     margin: 0;
     box-shadow: 0 0 12px #00000080;
+    padding: 1%;
 }
 header > div.wrapper{
     display: flex;
+    align-items: center;
 }
 header > div.wrapper > img {
     height: 64px;
