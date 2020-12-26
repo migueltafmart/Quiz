@@ -223,6 +223,7 @@ section#results>h3 {
     }
     article.wrapper{
         width: 45%;
+        margin: 12px;
     }
     article#quest{
         width: 100%;
@@ -230,7 +231,7 @@ section#results>h3 {
     section#opt > button{
         width: 42%;
         height: 72px;
-        margin: 4% 0%;
+        margin: 2% 0%;
     }
     button#quizButton{
         margin-top: 200px;
