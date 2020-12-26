@@ -200,3 +200,4 @@ function toQuiz() {
 };
 
 quizButton.addEventListener("click", toQuiz);
+document.querySelector("img").addEventListener("click", ()=> location.reload());
