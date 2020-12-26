@@ -219,7 +219,7 @@ section#results>h3 {
     }
     section#opt {
         flex-flow: row wrap;
-        justify-content: space-between;
+        justify-content: space-around;
     }
     article.wrapper{
         width: 45%;
