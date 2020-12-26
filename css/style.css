@@ -14,7 +14,9 @@ body {
 
 
 }
-
+img{
+    height: 100%;
+}
 article.wrapper {
     box-shadow: 0 0 12px #00000080;
     border-radius: 12px;
