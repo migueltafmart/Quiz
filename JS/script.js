@@ -1,7 +1,7 @@
 const API_URL = "https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple";
 const main = document.querySelector("main");
 let score = 0;
-let round = 0;
+let round = 1;
 //Quiz
 const questDiv = document.createElement("article");
 questDiv.id = "quest";
@@ -26,7 +26,6 @@ questDiv.appendChild(nextButton);
 const ProgressBar = document.createElement("article");
 ProgressBar.classList = "wrapper";
 const progressHeading = document.createElement("h3");
-progressHeading.innerText = `Question ${round+1} out of 10`;
 const barContainer = document.createElement("div");
 barContainer.id = "barContainer";
 const bar = document.createElement("div");
@@ -97,31 +96,7 @@ function toBeg() {
     while (main.firstChild) {
         main.removeChild(main.lastChild)
     };
-    main.appendChild(homeArticle);
-    let dates = JSON.parse(localStorage.quizes);
-    if (localStorage.quizes && (JSON.parse(localStorage.quizes).length > 1)) {
-        let dates = JSON.parse(localStorage.quizes);
-        while (dates.length > 5) {
-            dates.splice(0, 1)
-        };
-        main.appendChild(statsArticle);
-        new Chartist.Line('#stats', {
-            labels: dates.map(element => new Date(element.date).getDate()).sort(),
-            series: [dates.map(element => element.score)]
-        }, {
-            fullWidth: true,
-            chartPadding: {
-                right: 40
-            },
-            axisY: {
-                onlyInteger: true,
-                type: Chartist.FixedScaleAxis,
-                ticks: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                low: 0,
-                high: 10,
-            }
-        });
-    };
+    location.reload();
 };
 
 function isClicked(value) {
@@ -158,15 +133,14 @@ function gameFinish() {
         scoreSection.classList = "cls-1";
     }
     main.append(articleResults);
-    round = 0;
     answers.map(element => element.classList = "answer");
     repeatButton.addEventListener("click", toBeg);
 };
 
 function toNext(question) {
     ++round;
-    progressHeading.innerText = `Question ${round+1} out of 10`;
-    bar.classList = `p${round+1}`;
+    progressHeading.innerText = `Question ${round + 1} out of 10`;
+    bar.classList = `p${round +1 }`;
     if (round >= 10) {
         gameFinish();
     } else {
@@ -184,7 +158,9 @@ function toNext(question) {
 
 function checkQuest(questionArray) {
     let userAnswer = document.querySelector("button.clicked");
-    if (userAnswer == null) {} else if (questionArray[round].correct_answer === userAnswer.innerHTML) {
+    if (userAnswer == null) {
+        alert ("Please answer the question");
+    } else if (questionArray[round].correct_answer === userAnswer.innerHTML) {
         ++score;
         toNext(questionArray);
     } else {
@@ -202,6 +178,8 @@ function toQuiz() {
     while (main.firstChild) {
         main.removeChild(main.lastChild)
     };
+    score = 0;
+    round = 0;
     fetch(API_URL).then(res => res.json())
         .then(questJSON => {
             let questTextNode = document.createTextNode(htmlEntities(questJSON.results[round].question));
@@ -215,9 +193,7 @@ function toQuiz() {
             });
             answers.forEach(answer => answer.addEventListener("click", () => isClicked(answer.value)));
             nextButton.addEventListener("click", () => checkQuest(questJSON.results));
-            round = 0;
-            score = 0;
-            progressHeading.innerText = `Question ${round+1} out of 10`;
+            progressHeading.innerText = `Question ${round + 1} out of 10`;
             main.appendChild(questDiv);
             main.appendChild(ProgressBar);
         });
