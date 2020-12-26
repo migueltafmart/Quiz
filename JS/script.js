@@ -22,6 +22,18 @@ nextButton.innerText = "Next";
 questDiv.appendChild(questP);
 questDiv.appendChild(optDiv);
 questDiv.appendChild(nextButton);
+//ProgressBar
+const ProgressBar = document.createElement("article");
+ProgressBar.classList = "wrapper";
+const progressHeading = document.createElement("h3");
+progressHeading.innerText = `Question ${round+1} out of 10`;
+const barContainer = document.createElement("div");
+barContainer.id = "barContainer";
+const bar = document.createElement("div");
+barContainer.appendChild(bar);
+bar.id = "progress";
+ProgressBar.appendChild(progressHeading);
+ProgressBar.appendChild(barContainer);
 //Results
 const articleResults = document.createElement("article");
 articleResults.classList = "wrapper";
@@ -153,6 +165,8 @@ function gameFinish() {
 
 function toNext(question) {
     ++round;
+    progressHeading.innerText = `Question ${round+1} out of 10`;
+    bar.classList = `p${round+1}`;
     if (round >= 10) {
         gameFinish();
     } else {
@@ -201,7 +215,11 @@ function toQuiz() {
             });
             answers.forEach(answer => answer.addEventListener("click", () => isClicked(answer.value)));
             nextButton.addEventListener("click", () => checkQuest(questJSON.results));
+            round = 0;
+            score = 0;
+            progressHeading.innerText = `Question ${round+1} out of 10`;
             main.appendChild(questDiv);
+            main.appendChild(ProgressBar);
         });
 };
 
