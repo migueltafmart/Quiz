@@ -117,7 +117,7 @@ section#opt>button.notclicked:nth-child(4) {
 }
 
 button.action {
-    background: dodgerblue;
+    background: #1e90ff;
     color: white;
     font-weight: bold;
     width: 128px;
@@ -127,7 +127,7 @@ div#barContainer{
     height: 6px;
     border-radius: 6px;
     width: 100%;
-    background: #1e8fff80;
+    background: #1e8fff40;
 }
 div#progress{
     height: 6px;
