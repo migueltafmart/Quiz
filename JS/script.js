@@ -1,7 +1,20 @@
 const API_URL = "https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple";
 const main = document.querySelector("main");
+const ls = localStorage.quizes;
 let score = 0;
-let round = 1;
+let round = 0;
+//Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyAvZs90uH3apGsidTT6YXtSgnY7oZR9Xu4",
+    authDomain: "quiz-dca6c.firebaseapp.com",
+    projectId: "quiz-dca6c",
+    storageBucket: "quiz-dca6c.appspot.com",
+    messagingSenderId: "101542039973",
+    appId: "1:101542039973:web:add46f1d5e7281fe21584c",
+    measurementId: "G-W2X2EHFPM3",
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 //Quiz
 const questDiv = document.createElement("article");
 questDiv.id = "quest";
@@ -26,6 +39,7 @@ questDiv.appendChild(nextButton);
 const ProgressBar = document.createElement("article");
 ProgressBar.classList = "wrapper";
 const progressHeading = document.createElement("h3");
+progressHeading.innerText = `Question ${round+1} out of 10`;
 const barContainer = document.createElement("div");
 barContainer.id = "barContainer";
 const bar = document.createElement("div");
@@ -67,35 +81,36 @@ statsSection.classList = "ct-perfect-fifth";
 const quizButton = document.getElementById("quizButton");
 statsArticle.appendChild(statsHeading);
 statsArticle.appendChild(statsSection);
-
-if (localStorage.quizes && (JSON.parse(localStorage.quizes).length > 1)) {
-    let dates = JSON.parse(localStorage.quizes);
-    while (dates.length > 5) {
-        dates.splice(0, 1)
-    };
-    main.appendChild(statsArticle);
-    new Chartist.Line('#stats', {
-        labels: dates.map(element => new Date(element.date).getDate()).sort(),
-        series: [dates.map(element => element.score)]
-    }, {
-        fullWidth: true,
-        chartPadding: {
-            right: 40
-        },
-        axisY: {
-            onlyInteger: true,
-            type: Chartist.FixedScaleAxis,
-            ticks: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            low: 0,
-            high: 10,
+async function getDBData() {
+    const snapshot = await db.collection("scores").orderBy("date", "desc").limit(5).get();
+    return snapshot.docs.map(doc => doc.data()).reverse();
+}
+getDBData()
+    .then(scores => {
+        if (scores.length > 1) {
+            main.appendChild(statsArticle);
+            new Chartist.Line('#stats', {
+                labels: scores.map(element => new Date(element.date).getDay()),
+                series: [scores.map(element => element.score)]
+            }, {
+                fullWidth: true,
+                chartPadding: {
+                    right: 40
+                },
+                axisY: {
+                    onlyInteger: true,
+                    type: Chartist.FixedScaleAxis,
+                    ticks: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                    low: 0,
+                    high: 10,
+                }
+            });
         }
-    });
-};
+
+    })
+    .catch(error => console.error(error));
 
 function toBeg() {
-    while (main.firstChild) {
-        main.removeChild(main.lastChild)
-    };
     location.reload();
 };
 
@@ -106,21 +121,18 @@ function isClicked(value) {
 };
 
 function gameFinish() {
-    let quizes = [];
     let today = new Date();
+    let hh = String(today.getHours()).padStart(2, "0");
+    let min = String(today.getMinutes()).padStart(2, "0");
     let dd = String(today.getDate()).padStart(2, "0");
     let mm = String(today.getMonth() + 1).padStart(2, "0");
     let yyyy = today.getFullYear();
-    today = `${yyyy}-${mm}-${dd}`;
-    let newQuiz = {
-        "score": score,
-        "date": today,
-    };
-    if (localStorage.quizes) {
-        quizes = JSON.parse(localStorage.quizes)
-    };
-    quizes.push(newQuiz);
-    localStorage.quizes = JSON.stringify(quizes);
+    today = `${yyyy}-${mm}-${dd}-${hh}-${min}`;
+    db.collection("scores")
+        .add({
+            "score": score,
+            "date": today,
+        })
     while (main.firstChild) {
         main.removeChild(main.lastChild)
     };
@@ -133,14 +145,15 @@ function gameFinish() {
         scoreSection.classList = "cls-1";
     }
     main.append(articleResults);
+    round = 0;
     answers.map(element => element.classList = "answer");
     repeatButton.addEventListener("click", toBeg);
 };
 
 function toNext(question) {
     ++round;
-    progressHeading.innerText = `Question ${round + 1} out of 10`;
-    bar.classList = `p${round +1 }`;
+    progressHeading.innerText = `Question ${round+1} out of 10`;
+    bar.classList = `p${round+1}`;
     if (round >= 10) {
         gameFinish();
     } else {
@@ -158,9 +171,7 @@ function toNext(question) {
 
 function checkQuest(questionArray) {
     let userAnswer = document.querySelector("button.clicked");
-    if (userAnswer == null) {
-        alert ("Please answer the question");
-    } else if (questionArray[round].correct_answer === userAnswer.innerHTML) {
+    if (userAnswer == null) {} else if (questionArray[round].correct_answer === userAnswer.innerHTML) {
         ++score;
         toNext(questionArray);
     } else {
@@ -178,8 +189,6 @@ function toQuiz() {
     while (main.firstChild) {
         main.removeChild(main.lastChild)
     };
-    score = 0;
-    round = 0;
     fetch(API_URL).then(res => res.json())
         .then(questJSON => {
             let questTextNode = document.createTextNode(htmlEntities(questJSON.results[round].question));
@@ -193,7 +202,9 @@ function toQuiz() {
             });
             answers.forEach(answer => answer.addEventListener("click", () => isClicked(answer.value)));
             nextButton.addEventListener("click", () => checkQuest(questJSON.results));
-            progressHeading.innerText = `Question ${round + 1} out of 10`;
+            round = 0;
+            score = 0;
+            progressHeading.innerText = `Question ${round+1} out of 10`;
             main.appendChild(questDiv);
             main.appendChild(ProgressBar);
         });
