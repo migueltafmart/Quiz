@@ -121,13 +121,7 @@ function isClicked(value) {
 };
 
 function gameFinish() {
-    let today = new Date();
-    let hh = String(today.getHours()).padStart(2, "0");
-    let min = String(today.getMinutes()).padStart(2, "0");
-    let dd = String(today.getDate()).padStart(2, "0");
-    let mm = String(today.getMonth() + 1).padStart(2, "0");
-    let yyyy = today.getFullYear();
-    today = `${yyyy}-${mm}-${dd}-${hh}-${min}`;
+    let today = Date.now();
     db.collection("scores")
         .add({
             "score": score,
